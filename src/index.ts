@@ -1,8 +1,12 @@
 import express from 'express';
 import { buildSchema } from 'graphql';
 import { createHandler } from 'graphql-http/lib/use/express';
+import helmet from 'helmet';
+import { env } from './env';
 
 const app = express();
+app.use(helmet());
+app.use(express.json());
 
 const schema = buildSchema(`
   type DiceConfig {
@@ -34,6 +38,6 @@ app.all(
   }),
 );
 
-app.listen(process.env.PORT, () => {
-  console.log(`running on ${process.env.PORT}`);
+app.listen(env.PORT, async () => {
+  console.log(`running on ${env.PORT}`);
 });
