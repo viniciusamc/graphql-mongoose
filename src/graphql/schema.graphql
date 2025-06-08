@@ -1,0 +1,59 @@
+input OwnerInput {
+  type: String!
+  taxIdNumber: String
+  name: String!
+}
+
+input AccountInfoInput {
+  branch: String!
+  accountNumber: String!
+  accountType: String!
+  openingDate: String!
+}
+
+input CreateAccountInput {
+  requestId: String!
+  key: String!
+  keyType: String!
+  account: AccountInfoInput!
+  owner: OwnerInput!
+  reason: String!
+}
+
+type Owner {
+  type: String!
+  taxIdNumber: String
+  name: String!
+}
+
+type AccountInfo {
+  branch: String!
+  accountNumber: String!
+  accountType: String!
+  openingDate: String!
+}
+
+type Account {
+  id: ID
+  requestId: String
+  key: String
+  keyType: String
+  account: AccountInfo
+  owner: Owner
+  creationDate: String
+  reason: String
+  createdAt: String
+  updatedAt: String
+}
+
+type Query {
+  account(
+    key: String!
+    includeStatistics: Boolean
+    piRequestingParticipant: String!
+  ): Account
+}
+
+type Mutation {
+  createAccount(data: CreateAccountInput!): Account
+}

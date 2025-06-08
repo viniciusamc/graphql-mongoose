@@ -1,43 +1,33 @@
 import express from 'express';
-import { buildSchema } from 'graphql';
 import { createHandler } from 'graphql-http/lib/use/express';
 import helmet from 'helmet';
 import { env } from './env';
+import { schema } from './graphql';
+import { GraphQLError } from 'graphql';
+import { connectDatabase } from './db';
 
 const app = express();
 app.use(helmet());
 app.use(express.json());
 
-const schema = buildSchema(`
-  type DiceConfig {
-	  numDice: Int
-	  numSides: Int
-  }
-
-  type Query {
-    hello: String
-    rollDice(numDice: Int!, numSides: Int): DiceConfig
-  }
-`);
-
-const root = {
-  hello() {
-    return 'Hello World';
-  },
-
-  rollDice: ({ numDice, numSides }) => {
-    return { numDice, numSides };
-  },
-};
-
 app.all(
   '/graphql',
   createHandler({
-    schema: schema,
-    rootValue: root,
+    schema,
+    formatError: (error) => {
+      if (error instanceof GraphQLError) {
+        return error;
+      }
+      return new GraphQLError(error.message, {
+        extensions: { code: 'INTERNAL_SERVER_ERROR' },
+      });
+    },
   }),
 );
 
+await connectDatabase();
+
 app.listen(env.PORT, async () => {
-  console.log(`running on ${env.PORT}`);
+  console.log(`Server running on port ${env.PORT}`);
+  console.log(`GraphQL endpoint: http://localhost:${env.PORT}/graphql`);
 });

@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --loader ./ts-loader.js --env-file=.env --watch-path=./src --experimental-strip-types ./src/index.ts",
+    "start": "node --loader ./ts-loader.js --env-file=.env --watch-path=./src ./src/index.ts",
+    "dev": "tsx watch --env-file=.env ./src/index.ts",
     "lint": "biome lint --write ./src/*.ts",
     "format": "biome format --write ./src"
   },
@@ -14,20 +15,27 @@
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
+    "@graphql-tools/schema": "^10.0.23",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "apollo-server-express": "^3.13.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
     "graphql-http": "^1.22.4",
+    "graphql-tools": "^9.0.18",
     "helmet": "^8.1.0",
     "mongoose": "^8.15.0",
     "zod": "^3.25.56"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-resolvers": "^4.5.1",
     "lefthook": "^1.11.13",
-    "lint-staged": "^16.0.0"
+    "lint-staged": "^16.0.0",
+    "tsx": "^4.19.4"
   },
   "lint-staged": {
     "**/*(.ts)": ["pnpm lint", "pnpm format"]
