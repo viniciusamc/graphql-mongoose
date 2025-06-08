@@ -2,6 +2,7 @@ import { GraphQLError } from 'graphql';
 import { accountValidation } from '../validation/account.validation';
 import { Account } from '../../db/schemas/account.schema';
 import crypto from 'crypto';
+import { KeyTypesEnum } from '../../utils/enum/key-types';
 
 export const accountResolvers = {
   Query: {
@@ -37,6 +38,10 @@ export const accountResolvers = {
             details: validation.error.format(),
           },
         });
+      }
+
+      if (validation.data.keyType === KeyTypesEnum.EVP) {
+        validation.data.key = crypto.randomUUID();
       }
 
       const { requestId, ...accountParams } = validation.data;

@@ -13,7 +13,7 @@ input AccountInfoInput {
 
 input CreateAccountInput {
   requestId: String!
-  key: String!
+  key: String
   keyType: String!
   account: AccountInfoInput!
   owner: OwnerInput!

@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  MONGODB_URL: z.string().url(),
+  MONGO_USERNAME: z.string(),
+  MONGO_PASSWORD: z.string(),
+  MONGO_HOST: z.string(),
+  MONGO_PORT: z.string(),
+  MONGO_DB_NAME: z.string(),
   PORT: z.string(),
 });
 
